@@ -1,15 +1,26 @@
 import tkinter as tk
 from tkinter import ttk
-import DataCapture, FlashUtils,FlashLeaderBoard, threading
+import DataCapture, FlashUtils,FlashLeaderBoard, threading,configparser
+from pathlib import Path
 from PIL import ImageTk, Image
 
 from evdev import InputDevice, categorize, ecodes
 
+config = configparser.RawConfigParser()
+two_up = Path(__file__).parents[1]
+print(str(two_up)+'/magic.cfg')
+config.read(str(two_up)+'/magic.cfg')
+
+db = config.get("section1",'dataroot')
+imageroot = config.get("section1",'image_root')
+videoroot = config.get("section1",'video_root')
 
 class MagicFlashApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         s = ttk.Style(self)
+        s.theme_use('clam')
+
         s.configure('Red.TLabelframe', background='beige')
         s.configure('Red.TLabelframe.Label', font=('courier', 14, 'bold', 'italic'))
         s.configure('Red.TLabelframe.Label', foreground='brown')
@@ -127,7 +138,7 @@ class MagicFlashApplication(tk.Tk):
                                  width=50, height=5)
         self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,
                                    wrap=tk.WORD, font=("comic sans", 25), foreground="firebrick", background='beige',
-                                   width=50, height=15)
+                                   width=50, height=10)
 
 
         #self.leaderboard.grid(row=1, column=1)
@@ -171,7 +182,7 @@ class MagicFlashApplication(tk.Tk):
             win.wm_geometry('300x300+500+500')
             win.configure(background='beige')
 
-            self.image_clue = ImageTk.PhotoImage(Image.open('../MagicRoomPlayer/images/'+self.all_images[self.text_index-1]))
+            self.image_clue = ImageTk.PhotoImage(Image.open(imageroot+self.all_images[self.text_index-1]))
             self.image_label = ttk.Label(win,image=self.image_clue)
             self.image_label.grid(row=0, column=0)
 

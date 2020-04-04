@@ -1,11 +1,14 @@
 import sqlite3
-import random
+from pathlib import Path
 import configparser
 from tkinter import StringVar
 TEST_ROW = 16
 
 config = configparser.RawConfigParser()
-config.read('magic.cfg')
+two_up = Path(__file__).parents[1]
+print(str(two_up)+'/magic.cfg')
+config.read(str(two_up)+'/magic.cfg')
+
 db = config.get("section1",'dataroot')
 imageroot = config.get("section1",'image_root')
 videoroot = config.get("section1",'video_root')
