@@ -4,7 +4,7 @@ import DataCapture, FlashUtils,FlashLeaderBoard, threading,configparser
 from pathlib import Path
 from PIL import ImageTk, Image
 
-from evdev import InputDevice, categorize, ecodes
+
 
 config = configparser.RawConfigParser()
 two_up = Path(__file__).parents[1]
@@ -71,17 +71,7 @@ class MagicFlashApplication(tk.Tk):
         self.controlframe.grid_remove()
 
     def process_joystick(self):
-        self.gamepad = InputDevice("/dev/input/event16")
-        print(self.gamepad)
-        for event in self.gamepad.read_loop():
-            print(categorize(event))
-            if event.type == ecodes.EV_KEY:
-                if (event.code==115 and event.value==0):
-                    self.next_flashcard(self.text_index)
-                if (event.code==114 and event.value==0):
-                    self.next_flashcard(self.text_index)
-                if (event.code==212 and event.value==0):
-                    self.answer_flashcard()
+       pass
 
 
     def start_flashcards(self):
