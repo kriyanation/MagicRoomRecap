@@ -7,7 +7,7 @@ from PIL import ImageTk, Image
 
 
 config = configparser.RawConfigParser()
-two_up = Path(__file__).parents[1]
+two_up = Path(__file__).absolute().parents[2]
 print(str(two_up)+'/magic.cfg')
 config.read(str(two_up)+'/magic.cfg')
 
