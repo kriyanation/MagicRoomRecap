@@ -169,10 +169,10 @@ class MagicFlashApplication(tk.Tk):
     def  image_flashcard(self):
             win = tk.Toplevel()
             win.wm_title("Image Clue")
-            win.wm_geometry('300x300+500+500')
+            win.wm_geometry('400x400+500+300')
             win.configure(background='beige')
 
-            self.image_clue = ImageTk.PhotoImage(Image.open(imageroot+self.all_images[self.text_index-1]))
+            self.image_clue = ImageTk.PhotoImage(Image.open(imageroot+self.all_images[self.text_index-1]).resize((400,400)))
             self.image_label = ttk.Label(win,image=self.image_clue)
             self.image_label.grid(row=0, column=0)
 
