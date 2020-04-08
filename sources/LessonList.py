@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, Toplevel
-import DataCapture
+from sources import DataCapture
+
 
 class MagicLessonList(Toplevel):
     def __init__(self, bg,fg,buttonbg,buttonfg,selectmode,parent,*args, **kwargs):

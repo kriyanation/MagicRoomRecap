@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-import DataCapture, FlashUtils,FlashLeaderBoard, threading,configparser
+import threading,configparser
+from sources import DataCapture, FlashUtils, FlashLeaderBoard
 from pathlib import Path
 from PIL import ImageTk, Image
 
@@ -30,7 +31,7 @@ class MagicFlashApplication(tk.Tk):
               foreground=[('pressed', 'snow'), ('active', 'snow')])
         s.configure('TScrollbar', background='firebrick', foreground='beige')
 
-        self.title("FlashClues Recap")
+        self.title("Lesson Flashcards")
         self.configure(background='beige')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
@@ -90,7 +91,7 @@ class MagicFlashApplication(tk.Tk):
                                           style='Blue.TButton')
         self.image_button = ttk.Button(self.twocontrolframe, text="Image Clue", command=self.image_flashcard,
                                         style='Blue.TButton')
-        self.buttonimage = tk.PhotoImage(file="./images/speaker.png")
+        self.buttonimage = tk.PhotoImage(file="speaker.png")
 
 
         self.flash_audio_button_description = ttk.Button(self.labelframetwo, text="hello", image=self.buttonimage,

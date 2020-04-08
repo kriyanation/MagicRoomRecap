@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk,StringVar
-import DataCapture
+from sources import DataCapture
+
+
 class MagicLeaderBoard(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -52,9 +54,9 @@ class MagicLeaderBoard(tk.Frame):
         self.leaderboard.configure(state="normal")
         list_names = DataCapture.class_info()
         rowindex = 2
-        self.badge_image_medala = tk.PhotoImage(file= './images/medala.png' )
-        self.badge_image_medalb = tk.PhotoImage(file= './images/medalb.png' )
-        self.badge_image_medalc = tk.PhotoImage(file='./images/medalc.png')
+        self.badge_image_medala = tk.PhotoImage(file= '../images/medala.png' )
+        self.badge_image_medalb = tk.PhotoImage(file= '../images/medalb.png' )
+        self.badge_image_medalc = tk.PhotoImage(file='../images/medalc.png')
         for element in list_names:
             self.datanamelabel = ttk.Label(self.leaderboard, text=element[0].strip(), font = ('TkDefaultFont', 12),
                                            foreground = 'brown',wraplength = 100,background='beige')

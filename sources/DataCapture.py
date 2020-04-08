@@ -83,6 +83,7 @@ def class_info():
     rows = cur.fetchall()
     for element in rows:
         list_names.append(element)
+
     connection.commit()
     connection.close()
     return list_names
