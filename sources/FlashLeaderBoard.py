@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk,StringVar
-from sources import DataCapture
+import DataCapture
 
 
 class MagicLeaderBoard(tk.Frame):
@@ -21,9 +21,12 @@ class MagicLeaderBoard(tk.Frame):
 
 
        # self.leaderboard = ttk.LabelFrame(self, text = "Class Leaderboard", width=parent.screen_width/4, height=parent.screen_height,borderwidth=8,relief=tk.GROOVE,style='Red.TLabelframe')
-        self.leaderboard = tk.Text(self, width=100,
-                                          height=300, borderwidth=8, relief=tk.GROOVE,
-                                          background='beige', foreground='brown')
+        self.c_canvas= tk.Canvas(self,background='beige')
+
+        self.c_canvas.grid(row=0,column=0,columnspan=3)
+        self.leaderboard = tk.Frame(self.c_canvas, width=600,
+                                          height=400, relief=tk.GROOVE,
+                                          background='beige')
         self.dataframe= tk.Frame(self.leaderboard)
         self.dataframe.configure(background='beige')
         self.refreshbutton = ttk.Button(self.dataframe,text="Refresh",style='Blue.TButton',command=self.refresh_data,cursor="arrow")
@@ -32,12 +35,15 @@ class MagicLeaderBoard(tk.Frame):
         self.refreshbutton.grid(row=0,column=0)
         self.savebutton.grid(row=0,column=1,padx=5)
 
-        self.scrollbar = ttk.Scrollbar(self)
-        self.leaderboard.config(yscrollcommand=self.scrollbar.set)
-        self.scrollbar.grid(row=0,column=3,sticky="nsew")
+        self.scrollbar = ttk.Scrollbar(self, style='TScrollbar')
+        self.c_canvas.config(yscrollcommand=self.scrollbar.set)
 
-        self.scrollbar.config(command=self.leaderboard.yview, style='TScrollbar')
-        self.leaderboard.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.c_canvas.create_window((0, 0), window=self.leaderboard, anchor='nw')
+        self.leaderboard.bind("<Configure>", self.c_function)
+        self.scrollbar.config(command=self.c_canvas.yview)
+        #self.leaderboard.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.scrollbar.grid(row=0, column=3, sticky="nsew")
+
         self.headernamelabel = ttk.Label(self.leaderboard, text="Name", font = ('TkDefaultFont', 16),background='beige', foreground = 'brown')
         self.headerbadgelabel = ttk.Label(self.leaderboard, text="Badge", font=('TkDefaultFont', 16),background='beige', foreground='brown')
         self.headerpointslabel = ttk.Label(self.leaderboard, text="Points", font=('TkDefaultFont', 16),background='beige', foreground='brown')
@@ -47,11 +53,14 @@ class MagicLeaderBoard(tk.Frame):
         self.headerpointslabel.grid(row=1, column=2,padx=10, pady=2)
         self.refresh_data()
 
+    def c_function(self,event):
+       self.c_canvas.configure(scrollregion=self.c_canvas.bbox("all"),width=280,height=300)
+
     def refresh_data(self):
 
         self.spinboxvalue = []
         self.list_points = []
-        self.leaderboard.configure(state="normal")
+       # self.leaderboard.configure(state="normal")
         list_names = DataCapture.class_info()
         rowindex = 2
         self.badge_image_medala = tk.PhotoImage(file= '../images/medala.png' )
@@ -83,7 +92,7 @@ class MagicLeaderBoard(tk.Frame):
             self.databadgelabel.grid(row=rowindex, column=1, padx=10, pady=3)
             self.datapointspinner.grid(row=rowindex, column=2, padx=10, pady=3)
             rowindex += 1
-            self.leaderboard.configure(state="disabled")
+           # self.leaderboard.configure(state="disabled")
 
     def save_data(self):
         DataCapture.save_leader_board_data(self.list_points)

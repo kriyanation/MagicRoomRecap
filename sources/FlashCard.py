@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import threading,configparser
-from sources import DataCapture, FlashUtils, FlashLeaderBoard
+import DataCapture, FlashUtils, FlashLeaderBoard
 from pathlib import Path
 from PIL import ImageTk, Image
 
@@ -91,12 +91,12 @@ class MagicFlashApplication(tk.Tk):
                                           style='Blue.TButton')
         self.image_button = ttk.Button(self.twocontrolframe, text="Image Clue", command=self.image_flashcard,
                                         style='Blue.TButton')
-        self.buttonimage = tk.PhotoImage(file="speaker.png")
+        self.buttonimage = tk.PhotoImage(file="../images/speaker.png")
 
 
         self.flash_audio_button_description = ttk.Button(self.labelframetwo, text="hello", image=self.buttonimage,
                                                   command=lambda: self.play_quote_audio(self.quote_text),
-                                                  style='Green.TButton')
+                                                style='Green.TButton')
         self.labelframeone.grid_remove()
         self.show_leaderboard.grid_forget()
         self.controlframe.grid(row=0,column=0,sticky=tk.W)
@@ -183,7 +183,7 @@ class MagicFlashApplication(tk.Tk):
     def show_board(self):
         win = tk.Toplevel()
         win.wm_title("Leaderboard")
-        win.wm_geometry('300x300+500+500')
+        win.wm_geometry('300x400+500+500')
         win.configure(background='beige')
         self.leaderboard = FlashLeaderBoard.MagicLeaderBoard(win)
         self.leaderboard.grid(row=0, column =0)

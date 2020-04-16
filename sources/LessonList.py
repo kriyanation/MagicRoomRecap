@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, Toplevel
-from sources import DataCapture
+import DataCapture
 
 
 class MagicLessonList(Toplevel):
@@ -25,7 +25,7 @@ class MagicLessonList(Toplevel):
                                       font=("Comic Sans", 14, 'bold'), background=bg, foreground=fg)
         self.scroll_frame = ttk.Frame(self)
         self.choice_list = tk.Listbox(self.scroll_frame, selectmode=selectmode, background=bg,
-                                      selectbackground='sienna', selectforeground='white',foreground=fg, bd=0)
+                                      selectbackground='sienna', selectforeground='white',foreground=fg)
         self.lesson_button = ttk.Button(self, text="Select Lessons",
                                         style='Blue.TButton',command=self.select_lesson)
 
