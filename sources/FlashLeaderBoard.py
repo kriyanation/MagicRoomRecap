@@ -25,7 +25,7 @@ class MagicLeaderBoard(tk.Frame):
 
         self.c_canvas.grid(row=0,column=0,columnspan=3)
         self.leaderboard = tk.Frame(self.c_canvas, width=600,
-                                          height=400, relief=tk.GROOVE,
+                                          height=400,
                                           background='beige')
         self.dataframe= tk.Frame(self.leaderboard)
         self.dataframe.configure(background='beige')
