@@ -21,7 +21,8 @@ class MagicFlashApplication(tk.Tk):
         super().__init__(*args, **kwargs)
         s = ttk.Style(self)
         s.theme_use('clam')
-
+        self.screen_width = self.winfo_screenwidth()
+        self.screen_height = self.winfo_screenheight()
         s.configure('Red.TLabelframe', background='beige')
         s.configure('Red.TLabelframe.Label', font=('courier', 14, 'bold', 'italic'))
         s.configure('Red.TLabelframe.Label', foreground='brown')
@@ -89,6 +90,7 @@ class MagicFlashApplication(tk.Tk):
                                       style='Blue.TButton')
         self.reveal_button = ttk.Button(self.twocontrolframe, text="Reveal Card", command=self.answer_flashcard,
                                           style='Blue.TButton')
+        self.reveal_button.configure(state="disabled")
         self.image_button = ttk.Button(self.twocontrolframe, text="Image Clue", command=self.image_flashcard,
                                         style='Blue.TButton')
         self.buttonimage = tk.PhotoImage(file="../images/speaker.png")
@@ -126,16 +128,16 @@ class MagicFlashApplication(tk.Tk):
         self.image_button.grid(row=0, column=3, sticky=tk.W, padx=5)
         self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,
                                  wrap=tk.WORD, font=("comic sans", 25), foreground="firebrick", background='beige',
-                                 width=50, height=5)
+                                 width=int(self.screen_width/40),height=int(self.screen_height/200))
         self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,
                                    wrap=tk.WORD, font=("comic sans", 25), foreground="firebrick", background='beige',
-                                   width=50, height=10)
+                                  width=int(self.screen_width/40),height=int(self.screen_height/150))
 
 
         #self.leaderboard.grid(row=1, column=1)
 
     def next_flashcard(self,indexa):
-
+        self.reveal_button.configure(state="enabled")
         self.term_text.delete(1.0, tk.END)
         self.answer_text.delete(1.0, tk.END)
         print("next"+str(indexa))
