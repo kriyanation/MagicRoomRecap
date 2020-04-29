@@ -10,6 +10,16 @@ def expandList(twodlist):
             onedlist.append(element[i])
             i += 1
     return onedlist
+
+def expandImageList(twodlist):
+    onedlist = []
+    i=0
+    for element in twodlist:
+        for i in range(0,3):
+            onedlist.append((element[0],element[i+1]))
+            i += 1
+    return onedlist
+
 def playtextsound(text,V='m',L='en'):
     if _isLinux:
         engine = pyttsx3.init(driverName='espeak')

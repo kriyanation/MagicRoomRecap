@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-import configparser
+import configparser, os
 from tkinter import StringVar
 TEST_ROW = 16
 
@@ -8,10 +8,8 @@ config = configparser.RawConfigParser()
 two_up = Path(__file__).absolute().parents[2]
 print(str(two_up)+'/magic.cfg')
 config.read(str(two_up)+'/magic.cfg')
-
-db = config.get("section1",'dataroot')
-imageroot = config.get("section1",'image_root')
-videoroot = config.get("section1",'video_root')
+file_root = config.get("section1",'file_root')
+db = file_root+os.path.sep+"MagicRoom.db"
 
 def get_Images(lesson_id_list):
 
@@ -19,10 +17,10 @@ def get_Images(lesson_id_list):
     cur = connection.cursor()
     lesson_id_tuple = tuple(lesson_id_list)
     if len(lesson_id_tuple) == 1:
-        sql = "select Factual_Image1,Factual_Image2,Factual_Image3 from Magic_Science_Lessons where Lesson_ID is ?"
+        sql = "select Lesson_ID,Factual_Image1,Factual_Image2,Factual_Image3 from Magic_Science_Lessons where Lesson_ID is ?"
         cur.execute(sql, (lesson_id_tuple[0],))
     else:
-        sql = "select Factual_Image1,Factual_Image2,Factual_Image3 from Magic_Science_Lessons where Lesson_ID in {}".format(lesson_id_tuple)
+        sql = "select Lesson_ID, Factual_Image1,Factual_Image2,Factual_Image3 from Magic_Science_Lessons where Lesson_ID in {}".format(lesson_id_tuple)
         cur.execute(sql)
     images = cur.fetchall()
     connection.commit()

@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import ttk
 import threading,configparser
@@ -36,7 +37,8 @@ class MagicFlashApplication(tk.Tk):
         self.configure(background='beige')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
-        self.labelframeone = ttk.Labelframe(self, width=self.screen_width / 2.0, height=self.screen_height / 2.2,
+        self.bind("<Configure>",self.resize_c)
+        self.labelframeone = ttk.Labelframe(self,
                                             text="Choose Lessons", borderwidth=2,relief=tk.RIDGE,style="Red.TLabelframe")
 
         self.choice_label = ttk.Label(self.labelframeone, text="Select your lessons for the flash card game ",
@@ -65,6 +67,12 @@ class MagicFlashApplication(tk.Tk):
 
     # self.show_leaderboard.grid(row = 0, column=0,sticky=tk.W)
 
+    def resize_c(self,event):
+        if hasattr(self,"term_text"):
+            self.term_text.configure( width=int(self.winfo_width()/60), height=int(self.winfo_height()/70))
+        if hasattr(self, "answer_text"):
+            self.answer_text.configure(width=int(self.winfo_width() / 60), height=int(self.winfo_height() / 70))
+
     def show_lessons(self):
         self.labelframetwo.grid_remove()
         self.labelframeone.grid(row=0,column=0,sticky=tk.EW)
@@ -80,7 +88,7 @@ class MagicFlashApplication(tk.Tk):
         self.text_index = 0
         self.reveal_index = 0
         self.text_fact_index = 0
-        self.labelframetwo = ttk.Labelframe(self, width=self.screen_width/1.5, height=self.screen_height /1.2,
+        self.labelframetwo = ttk.Labelframe(self,
                                             text="Flash Cards", borderwidth=2,relief=tk.RIDGE,style="Red.TLabelframe")
 
         self.twocontrolframe = tk.Frame(self.labelframetwo, background="beige")
@@ -100,7 +108,7 @@ class MagicFlashApplication(tk.Tk):
                                                   command=lambda: self.play_quote_audio(self.quote_text),
                                                 style='Green.TButton')
         self.labelframeone.grid_remove()
-        self.show_leaderboard.grid_forget()
+
         self.controlframe.grid(row=0,column=0,sticky=tk.W)
         self.show_leaderboard.grid(row=0, column=0,padx=10)
         self.show_button.grid(row=0, column=1)
@@ -117,23 +125,23 @@ class MagicFlashApplication(tk.Tk):
 
         self.all_terms = FlashUtils.expandList(term_text_list)
         self.all_descriptions = FlashUtils.expandList(description_text_list)
-        self.all_images = FlashUtils.expandList(image_list)
+        self.all_images = FlashUtils.expandImageList(image_list)
 
-        self.labelframetwo.grid(row=1,column=0,padx = 200,sticky=tk.EW)
-        self.labelframetwo.grid_propagate(False)
+
         self.twocontrolframe.grid(row=0, column=0, sticky=tk.W)
         self.next_button.grid(row=0,column=4, sticky=tk.W,padx=5)
 
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
         self.image_button.grid(row=0, column=3, sticky=tk.W, padx=5)
+
         self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,
-                                 wrap=tk.WORD, font=("comic sans", 25), foreground="firebrick", background='beige',
-                                 width=int(self.screen_width/40),height=int(self.screen_height/200))
+                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="firebrick", background='beige',
+                                )
         self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,
-                                   wrap=tk.WORD, font=("comic sans", 25), foreground="firebrick", background='beige',
-                                  width=int(self.screen_width/40),height=int(self.screen_height/150))
-
-
+                                   wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="firebrick", background='beige',
+                                  )
+        self.labelframetwo.grid(row=1, column=0, padx=200,pady=100,sticky=tk.NSEW)
+        self.next_flashcard(self.text_index)
         #self.leaderboard.grid(row=1, column=1)
 
     def next_flashcard(self,indexa):
@@ -142,14 +150,22 @@ class MagicFlashApplication(tk.Tk):
         self.answer_text.delete(1.0, tk.END)
         print("next"+str(indexa))
         self.term_text.insert(1.0, self.all_terms[indexa])
-        self.term_text.grid(row=1,column=0,columnspan=4,padx=25,pady=10)
+        self.term_text.grid(row=1,column=0,padx=25,pady=10)
         self.text_index += 1
         if self.text_index == len(self.all_terms) :
             self.text_index = 0
         self.flash_audio_button_term = ttk.Button(self.labelframetwo, text="hello", image=self.buttonimage,
                                                   command=lambda: self.play_term_audio( self.all_terms[indexa]),
                                                   style='Blue.TButton')
-        self.flash_audio_button_term.grid(row=1,column=5)
+        self.flash_audio_button_term.grid(row=1,column=1,padx=15)
+        self.animate_flashcard(self.term_text)
+
+    def animate_flashcard(self,text):
+        if text.cget('background')=="dark turquoise":
+            text.configure(background="beige")
+        else:
+            text.configure(background="dark turquoise")
+        self.after(1000,self.animate_flashcard,text)
 
     def answer_flashcard(self):
         self.answer_text.delete(1.0, tk.END)
@@ -160,8 +176,8 @@ class MagicFlashApplication(tk.Tk):
                                                   command=lambda: self.play_term_audio(self.all_descriptions[self.reveal_index]),
                                                   style='Blue.TButton')
 
-        self.answer_text.grid(row=2,column=0,padx=15,columnspan=4)
-        self.flash_audio_button_description.grid(row=2, column=5)
+        self.answer_text.grid(row=1,column=3,padx=15)
+        self.flash_audio_button_description.grid(row=1, column=4)
 
 
 
@@ -175,7 +191,9 @@ class MagicFlashApplication(tk.Tk):
             win.wm_geometry('400x400+500+300')
             win.configure(background='beige')
 
-            self.image_clue = ImageTk.PhotoImage(Image.open(imageroot+self.all_images[self.text_index-1]).resize((400,400)))
+            self.image_clue = ImageTk.PhotoImage(Image.open(DataCapture.file_root+os.path.sep+"Lessons"+
+                                                            os.path.sep+"Lesson"+str(self.all_images[self.text_index-1][0])+os.path.sep+
+                                                            "images"+os.path.sep+self.all_images[self.text_index-1][1]).resize((400,400)))
             self.image_label = ttk.Label(win,image=self.image_clue)
             self.image_label.grid(row=0, column=0)
 
