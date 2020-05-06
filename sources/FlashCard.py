@@ -8,14 +8,7 @@ from PIL import ImageTk, Image
 
 
 
-config = configparser.RawConfigParser()
-two_up = Path(__file__).absolute().parents[2]
-print(str(two_up)+'/magic.cfg')
-config.read(str(two_up)+'/magic.cfg')
 
-db = config.get("section1",'dataroot')
-imageroot = config.get("section1",'image_root')
-videoroot = config.get("section1",'video_root')
 
 class MagicFlashApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
