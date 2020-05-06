@@ -145,6 +145,7 @@ class MagicFlashApplication(tk.Tk):
         #self.leaderboard.grid(row=1, column=1)
 
     def next_flashcard(self,indexa):
+
         self.reveal_button.configure(state="enabled")
         self.term_text.delete(1.0, tk.END)
         self.answer_text.delete(1.0, tk.END)
@@ -158,14 +159,17 @@ class MagicFlashApplication(tk.Tk):
                                                   command=lambda: self.play_term_audio( self.all_terms[indexa]),
                                                   style='Blue.TButton')
         self.flash_audio_button_term.grid(row=1,column=1,padx=15)
-        self.animate_flashcard(self.term_text)
+        self.animate_flashcard(self.term_text,0)
 
-    def animate_flashcard(self,text):
-        if text.cget('background')=="dark turquoise":
+    def animate_flashcard(self,text,index):
+        if text.cget('background')=="bisque2":
             text.configure(background="beige")
         else:
-            text.configure(background="dark turquoise")
-        self.after(1000,self.animate_flashcard,text)
+            text.configure(background="bisque2")
+        if(index == 5):
+            return
+        index += 1
+        self.after(1000,self.animate_flashcard,text,index)
 
     def answer_flashcard(self):
         self.answer_text.delete(1.0, tk.END)
