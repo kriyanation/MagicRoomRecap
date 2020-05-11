@@ -202,6 +202,7 @@ class MagicFlashApplication(tk.Toplevel):
         win.wm_title("Leaderboard")
         win.wm_geometry('300x400+500+500')
         win.configure(background='beige')
+        win.attributes("-topmost",True)
         self.leaderboard = FlashLeaderBoard.MagicLeaderBoard(win)
         self.leaderboard.grid(row=0, column =0)
 
