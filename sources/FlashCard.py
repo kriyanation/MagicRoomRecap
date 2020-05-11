@@ -2,7 +2,7 @@ import os
 import tkinter as tk
 from tkinter import ttk
 import threading,configparser
-import DataCapture, FlashUtils, FlashLeaderBoard
+import data_capture_flashcard, FlashUtils, FlashLeaderBoard
 from pathlib import Path
 from PIL import ImageTk, Image
 
@@ -10,7 +10,7 @@ from PIL import ImageTk, Image
 
 
 
-class MagicFlashApplication(tk.Tk):
+class MagicFlashApplication(tk.Toplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         s = ttk.Style(self)
@@ -40,7 +40,7 @@ class MagicFlashApplication(tk.Tk):
         self.choice_list = tk.Listbox(self.scroll_frame,selectmode=tk.MULTIPLE,background='beige',selectbackground='sienna',selectforeground='white',bd=0)
         self.lesson_button = ttk.Button(self.labelframeone,text="Select Lessons",command = self.start_flashcards,style='Blue.TButton')
 
-        self.lesson_list = DataCapture.get_Lessons()
+        self.lesson_list = data_capture_flashcard.get_Lessons()
         for element in self.lesson_list:
             self.choice_list.insert(tk.END,str(element[0])+' : '+element[1])
         self.labelframeone.grid(row = 0,sticky=tk.EW)
@@ -112,9 +112,9 @@ class MagicFlashApplication(tk.Tk):
             self.data = self.choice_list.get(item)
             index = self.data[0:self.data.index(':')-1]
             lesson_list.append(int(index.strip()))
-        term_text_list = DataCapture.get_Fact_Terms(lesson_list)
-        description_text_list = DataCapture.get_Fact_Descriptions(lesson_list)
-        image_list = DataCapture.get_Images(lesson_list)
+        term_text_list = data_capture_flashcard.get_Fact_Terms(lesson_list)
+        description_text_list = data_capture_flashcard.get_Fact_Descriptions(lesson_list)
+        image_list = data_capture_flashcard.get_Images(lesson_list)
 
         self.all_terms = FlashUtils.expandList(term_text_list)
         self.all_descriptions = FlashUtils.expandList(description_text_list)
@@ -188,7 +188,7 @@ class MagicFlashApplication(tk.Tk):
             win.wm_geometry('400x400+500+300')
             win.configure(background='beige')
 
-            self.image_clue = ImageTk.PhotoImage(Image.open(DataCapture.file_root+os.path.sep+"Lessons"+
+            self.image_clue = ImageTk.PhotoImage(Image.open(data_capture_flashcard.file_root+os.path.sep+"Lessons"+
                                                             os.path.sep+"Lesson"+str(self.all_images[self.text_index-1][0])+os.path.sep+
                                                             "images"+os.path.sep+self.all_images[self.text_index-1][1]).resize((400,400)))
             self.image_label = ttk.Label(win,image=self.image_clue)

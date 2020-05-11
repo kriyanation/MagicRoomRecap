@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk,StringVar
-import DataCapture
+import data_capture_flashcard
 
 
 class MagicLeaderBoard(tk.Frame):
@@ -61,7 +61,7 @@ class MagicLeaderBoard(tk.Frame):
         self.spinboxvalue = []
         self.list_points = []
        # self.leaderboard.configure(state="normal")
-        list_names = DataCapture.class_info()
+        list_names = data_capture_flashcard.class_info()
         rowindex = 2
         self.badge_image_medala = tk.PhotoImage(file= '../images/medala.png' )
         self.badge_image_medalb = tk.PhotoImage(file= '../images/medalb.png' )
@@ -95,7 +95,7 @@ class MagicLeaderBoard(tk.Frame):
            # self.leaderboard.configure(state="disabled")
 
     def save_data(self):
-        DataCapture.save_leader_board_data(self.list_points)
+        data_capture_flashcard.save_leader_board_data(self.list_points)
 
 
 
