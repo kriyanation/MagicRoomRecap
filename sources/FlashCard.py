@@ -180,7 +180,10 @@ class MagicFlashApplication(tk.Toplevel):
 
 
     def play_term_audio(self,text):
-        FlashUtils.playtextsound(text)
+        sound_speak = threading.Thread(target=FlashUtils.playtextsound,
+                                       args=(text, 'f'))
+        sound_speak.start()
+
 
     def  image_flashcard(self):
             win = tk.Toplevel()
