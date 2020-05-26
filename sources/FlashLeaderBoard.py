@@ -6,34 +6,20 @@ import data_capture_flashcard
 class MagicLeaderBoard(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.configure(background='')
-        s = ttk.Style(self)
-        s.configure('Red.TLabelframe', background='beige')
-        s.configure('Red.TLabelframe.Label', font=('courier', 12, 'bold','italic'))
-        s.configure('Red.TLabelframe.Label', foreground='brown')
-        s.configure('Red.TLabelframe.Label', background='beige')
-
-        s.configure('Blue.TButton', background='firebrick', foreground='snow')
-        s.map('Blue.TButton', background=[('active', '!disabled', 'peru'), ('pressed', 'firebrick')],
-              foreground=[('pressed', 'snow'), ('active', 'snow')])
-        s.configure('TScrollbar', background='firebrick', foreground='beige')
-
-
-
+        self.configure(background='steelblue3')
        # self.leaderboard = ttk.LabelFrame(self, text = "Class Leaderboard", width=parent.screen_width/4, height=parent.screen_height,borderwidth=8,relief=tk.GROOVE,style='Red.TLabelframe')
-        self.c_canvas= tk.Canvas(self,background='beige')
+        self.c_canvas= tk.Canvas(self,background='white')
 
         self.c_canvas.grid(row=0,column=0,columnspan=3)
         self.leaderboard = tk.Frame(self.c_canvas, width=600,
                                           height=400,
-                                          background='beige')
+                                          background='white')
         self.dataframe= tk.Frame(self.leaderboard)
-        self.dataframe.configure(background='beige')
-        self.refreshbutton = ttk.Button(self.dataframe,text="Refresh",style='Blue.TButton',command=self.refresh_data,cursor="arrow")
-        self.savebutton = ttk.Button(self.dataframe,text="Save",style='Blue.TButton',command=self.save_data,cursor="arrow")
+        self.dataframe.configure(background='white')
+        self.savebutton = ttk.Button(self.dataframe,width=5,text="Save",style='Blue.TButton',command=self.save_data,cursor="arrow")
         self.dataframe.grid(row=0,column=0,columnspan=3)
-        self.refreshbutton.grid(row=0,column=0)
-        self.savebutton.grid(row=0,column=1,padx=5)
+
+        self.savebutton.grid(row=0,column=0,padx=5)
 
         self.scrollbar = ttk.Scrollbar(self, style='TScrollbar')
         self.c_canvas.config(yscrollcommand=self.scrollbar.set)
@@ -44,9 +30,9 @@ class MagicLeaderBoard(tk.Frame):
         #self.leaderboard.grid(row=0, column=0, sticky=tk.W + tk.E)
         self.scrollbar.grid(row=0, column=3, sticky="nsew")
 
-        self.headernamelabel = ttk.Label(self.leaderboard, text="Name", font = ('TkDefaultFont', 16),background='beige', foreground = 'brown')
-        self.headerbadgelabel = ttk.Label(self.leaderboard, text="Badge", font=('TkDefaultFont', 16),background='beige', foreground='brown')
-        self.headerpointslabel = ttk.Label(self.leaderboard, text="Points", font=('TkDefaultFont', 16),background='beige', foreground='brown')
+        self.headernamelabel = ttk.Label(self.leaderboard, text="Name", font = ('TkDefaultFont', 16),background='white', foreground = 'midnight blue')
+        self.headerbadgelabel = ttk.Label(self.leaderboard, text="Badge", font=('TkDefaultFont', 16),background='white', foreground='midnight blue')
+        self.headerpointslabel = ttk.Label(self.leaderboard, text="Points", font=('TkDefaultFont', 16),background='white', foreground='midnight blue')
 
         self.headernamelabel.grid(row=1, column=0, padx=10, pady=2)
         self.headerbadgelabel.grid(row=1, column=1,padx=10, pady=2)
@@ -54,7 +40,7 @@ class MagicLeaderBoard(tk.Frame):
         self.refresh_data()
 
     def c_function(self,event):
-       self.c_canvas.configure(scrollregion=self.c_canvas.bbox("all"),width=280,height=300)
+       self.c_canvas.configure(scrollregion=self.c_canvas.bbox("all"),width=295,height=300)
 
     def refresh_data(self):
 
@@ -68,20 +54,20 @@ class MagicLeaderBoard(tk.Frame):
         self.badge_image_medalc = tk.PhotoImage(file='../images/medalc.png')
         for element in list_names:
             self.datanamelabel = ttk.Label(self.leaderboard, text=element[0].strip(), font = ('TkDefaultFont', 12),
-                                           foreground = 'brown',wraplength = 100,background='beige')
+                                           foreground = 'midnight blue',wraplength = 100,background='white')
             if element[1].strip() == 'a':
-                self.databadgelabel = ttk.Label(self.leaderboard, image=self.badge_image_medala,background='beige')
+                self.databadgelabel = ttk.Label(self.leaderboard, image=self.badge_image_medala,background='white')
             elif element[1].strip() == 'b':
-                self.databadgelabel = ttk.Label(self.leaderboard, image=self.badge_image_medalb,background='beige')
+                self.databadgelabel = ttk.Label(self.leaderboard, image=self.badge_image_medalb,background='white')
             else:
                 self.databadgelabel = ttk.Label(self.leaderboard, image=self.badge_image_medalc,
-                                                background='beige')
+                                                background='white')
 
             points = StringVar()
             points.set(str(element[2]))
             self.spinboxvalue.append(points)
             print("rowindex"+str(rowindex))
-            self.datapointspinner = ttk.Spinbox(self.leaderboard,background='beige',foreground='brown',font=('TkDefaultFont', 12),
+            self.datapointspinner = ttk.Spinbox(self.leaderboard,background='white',foreground='midnight blue',font=('TkDefaultFont', 12),
                                                 from_=0,to=100,textvariable=self.spinboxvalue[rowindex-2],wrap=True,width=2)
 
             self.list_points.append((element[0],self.spinboxvalue[rowindex-2]))
@@ -96,6 +82,7 @@ class MagicLeaderBoard(tk.Frame):
 
     def save_data(self):
         data_capture_flashcard.save_leader_board_data(self.list_points)
+        self.refresh_data()
 
 
 
