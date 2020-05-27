@@ -2,6 +2,8 @@ import os
 import tkinter as tk
 from tkinter import ttk
 import threading,configparser
+
+import LessonListFlash
 import data_capture_flashcard, FlashUtils, FlashLeaderBoard
 from pathlib import Path
 from PIL import ImageTk, Image
@@ -17,50 +19,33 @@ class MagicFlashApplication(tk.Toplevel):
         s.theme_use('clam')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
-        s.configure('Red.TLabelframe', background='steelblue3',bordercolor="midnight blue")
+        s.configure('Red.TLabelframe', background='steelblue4',bordercolor="midnight blue")
         s.configure('Red.TLabelframe.Label', font=('helvetica', 15, 'bold'))
         s.configure('Red.TLabelframe.Label', foreground='white')
-        s.configure('Red.TLabelframe.Label', background='steelblue3')
+        s.configure('Red.TLabelframe.Label', background='steelblue4')
         s.configure('Blue.TButton', background='white', foreground='midnight blue',font=('helvetica', 12, 'bold'),bordercolor="midnight blue")
         s.map('Blue.TButton', background=[('active', '!disabled', 'cyan'), ('pressed', 'white')],
               foreground=[('pressed', 'midnight blue'), ('active', 'midnight blue')])
-        s.configure('TScrollbar', background='midnight blue', foreground='steelblue3')
-        s.map('TScrollbar', background=[('active', '!disabled', 'steelblue3'), ('pressed', 'snow')],
+        s.configure('TScrollbar', background='midnight blue', foreground='steelblue4')
+        s.map('TScrollbar', background=[('active', '!disabled', 'steelblue4'), ('pressed', 'snow')],
               foreground=[('pressed', 'midnight blue'), ('active', 'midnight blue')])
 
         self.title("Lesson Flashcards")
-        self.configure(background='steelblue3')
+        self.configure(background='steelblue4')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
         self.bind("<Configure>",self.resize_c)
-        self.labelframeone = ttk.Labelframe(self,
-                                            text="Choose Lessons", borderwidth=2,relief=tk.RIDGE,style="Red.TLabelframe")
 
-        self.choice_label = ttk.Label(self.labelframeone, text="Select your lessons for the flash card game ",
-                                      font=("helvetica",16,'bold'),background='steelblue3',foreground='white')
-        self.scroll_frame = ttk.Frame(self.labelframeone)
-        self.choice_list = tk.Listbox(self.scroll_frame,highlightbackground="midnight blue",selectmode=tk.MULTIPLE,background='white',selectbackground='midnight blue',selectforeground='white',foreground ="midnight blue",bd=2)
-        self.lesson_button = ttk.Button(self.labelframeone,text="Select Lessons",command = self.start_flashcards,style='Blue.TButton')
-
-        self.lesson_list = data_capture_flashcard.get_Lessons()
-        for element in self.lesson_list:
-            self.choice_list.insert(tk.END,str(element[0])+' : '+element[1])
-        self.labelframeone.grid(row = 0,sticky=tk.EW)
-        self.choice_label.grid(row=0,column=0)
-        self.scroll_frame.grid(row=1,column=0)
-        self.choice_list.grid(row=0,column=0,sticky=tk.NSEW)
-        self.lesson_button.grid(row=2,column=0,pady=10)
-        self.scrollbar = ttk.Scrollbar(self.scroll_frame,style='TScrollbar')
-        self.choice_list.config(yscrollcommand=self.scrollbar.set)
-        self.scrollbar.config(command=self.choice_list.yview)
-        self.scrollbar.grid(row = 0,column=1,sticky=tk.NSEW)
-        self.controlframe = tk.Frame(self,background='steelblue3')
+        self.controlframe = tk.Frame(self,background='steelblue4')
         self.show_leaderboard = ttk.Button(self.controlframe, text="Show Leaderboard", command=self.show_board,
                                         style='Blue.TButton')
-        self.show_button = ttk.Button(self.controlframe, text="Show Lessons", command=self.show_lessons,
-                                      style='Blue.TButton')
 
-    # self.show_leaderboard.grid(row = 0, column=0,sticky=tk.W)
+        self.lesson_list = []
+        app = LessonListFlash.MagicLessonList(parent=self)
+        app.geometry("400x600+50+50")
+        self.wait_window(app)
+        self.start_flashcards()
+
 
     def resize_c(self,event):
         if hasattr(self,"term_text"):
@@ -68,15 +53,7 @@ class MagicFlashApplication(tk.Toplevel):
         if hasattr(self, "answer_text"):
             self.answer_text.configure(width=int(self.winfo_width() / 60), height=int(self.winfo_height() / 70))
 
-    def show_lessons(self):
-        self.labelframetwo.grid_remove()
-        self.labelframeone.grid(row=0,column=0,sticky=tk.EW)
-        self.show_button.grid_remove()
-        self.show_leaderboard.grid_remove()
-        self.controlframe.grid_remove()
 
-    def process_joystick(self):
-       pass
 
 
     def start_flashcards(self):
@@ -86,7 +63,7 @@ class MagicFlashApplication(tk.Toplevel):
         self.labelframetwo = ttk.Labelframe(self,
                                             text="Flash Cards", borderwidth=2,relief=tk.RIDGE,style="Red.TLabelframe")
 
-        self.twocontrolframe = tk.Frame(self.labelframetwo, background="steelblue3")
+        self.twocontrolframe = tk.Frame(self.labelframetwo, background="steelblue4")
 
         self.next_button = ttk.Button(self.twocontrolframe, text="Next Card",
                                       command=lambda: self.next_flashcard(self.text_index),
@@ -99,24 +76,18 @@ class MagicFlashApplication(tk.Toplevel):
         self.buttonimage = tk.PhotoImage(file="../images/speaker.png")
 
 
-        self.flash_audio_button_description = ttk.Button(self.labelframetwo, text="hello", image=self.buttonimage,
-                                                  command=lambda: self.play_quote_audio(self.quote_text),
-                                                style='Green.TButton')
-        self.labelframeone.grid_remove()
+
+
 
         self.controlframe.grid(row=0,column=0,sticky=tk.W,pady=5)
         self.show_leaderboard.grid(row=0, column=0,padx=10)
-        self.show_button.grid(row=0, column=1)
 
-        lesson_list = []
-        items = self.choice_list.curselection()
-        for item in items:
-            self.data = self.choice_list.get(item)
-            index = self.data[0:self.data.index(':')-1]
-            lesson_list.append(int(index.strip()))
-        term_text_list = data_capture_flashcard.get_Fact_Terms(lesson_list)
-        description_text_list = data_capture_flashcard.get_Fact_Descriptions(lesson_list)
-        image_list = data_capture_flashcard.get_Images(lesson_list)
+
+
+
+        term_text_list = data_capture_flashcard.get_Fact_Terms(self.lesson_list)
+        description_text_list = data_capture_flashcard.get_Fact_Descriptions(self.lesson_list)
+        image_list = data_capture_flashcard.get_Images(self.lesson_list)
 
         self.all_terms = FlashUtils.expandList(term_text_list)
         self.all_descriptions = FlashUtils.expandList(description_text_list)
@@ -191,7 +162,7 @@ class MagicFlashApplication(tk.Toplevel):
             win = tk.Toplevel()
             win.wm_title("Image Clue")
             win.wm_geometry('360x400+500+300')
-            win.configure(background='steelblue3')
+            win.configure(background='steelblue4')
 
             self.image_clue = ImageTk.PhotoImage(Image.open(data_capture_flashcard.file_root+os.path.sep+"Lessons"+
                                                             os.path.sep+"Lesson"+str(self.all_images[self.text_index-1][0])+os.path.sep+
@@ -205,8 +176,8 @@ class MagicFlashApplication(tk.Toplevel):
     def show_board(self):
         win = tk.Toplevel()
         win.wm_title("Leaderboard")
-        win.wm_geometry('315x400+500+500')
-        win.configure(background='steelblue3')
+        win.wm_geometry('315x600+100+100')
+        win.configure(background='steelblue4')
         win.attributes("-topmost",True)
         self.leaderboard = FlashLeaderBoard.MagicLeaderBoard(win)
         self.leaderboard.grid(row=0, column =0)
