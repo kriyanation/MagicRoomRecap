@@ -19,16 +19,16 @@ class MagicFlashApplication(tk.Toplevel):
         s.theme_use('clam')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
-        s.configure('Red.TLabelframe', background='steelblue4',bordercolor="midnight blue")
+        s.configure('Red.TLabelframe', background='steelblue4',bordercolor="royalblue4")
         s.configure('Red.TLabelframe.Label', font=('helvetica', 15, 'bold'))
         s.configure('Red.TLabelframe.Label', foreground='white')
         s.configure('Red.TLabelframe.Label', background='steelblue4')
-        s.configure('Blue.TButton', background='white', foreground='midnight blue',font=('helvetica', 12, 'bold'),bordercolor="midnight blue")
+        s.configure('Blue.TButton', background='cyan', foreground='royalblue4',font=('helvetica', 12, 'bold'),bordercolor="royalblue4")
         s.map('Blue.TButton', background=[('active', '!disabled', 'cyan'), ('pressed', 'white')],
-              foreground=[('pressed', 'midnight blue'), ('active', 'midnight blue')])
-        s.configure('TScrollbar', background='midnight blue', foreground='steelblue4')
+                   foreground=[('pressed', 'royalblue4'), ('active', 'royalblue4')])
+        s.configure('TScrollbar', background='royalblue4', foreground='steelblue4')
         s.map('TScrollbar', background=[('active', '!disabled', 'steelblue4'), ('pressed', 'snow')],
-              foreground=[('pressed', 'midnight blue'), ('active', 'midnight blue')])
+              foreground=[('pressed', 'royalblue4'), ('active', 'royalblue4')])
 
         self.title("Lesson Flashcards")
         self.configure(background='steelblue4')
@@ -100,11 +100,11 @@ class MagicFlashApplication(tk.Toplevel):
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
         self.image_button.grid(row=0, column=3, sticky=tk.W, padx=5)
 
-        self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="midnight blue",
-                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="midnight blue", background='white',
+        self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
+                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="royalblue4", background='white',
                                 )
-        self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="midnight blue",
-                                   wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="midnight blue", background='white',
+        self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
+                                   wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="royalblue4", background='white',
                                   )
         self.labelframetwo.grid(row=1, column=0, padx=200,pady=100,sticky=tk.NSEW)
         self.next_flashcard(self.text_index)
