@@ -10,10 +10,10 @@ class MagicLessonList(Toplevel):
 
         s = ttk.Style(self)
         s.theme_use('clam')
-        s.configure('Red.TLabelframe', background="steelblue4")
+        s.configure('Red.TLabelframe', background="deepskyblue4")
         s.configure('Red.TLabelframe.Label', font=('helvetica', 14, 'bold'))
         s.configure('Red.TLabelframe.Label', foreground="white")
-        s.configure('Red.TLabelframe.Label', background="steelblue4")
+        s.configure('Red.TLabelframe.Label', background="deepskyblue4")
         s.configure('Blue.TButton', background="white", foreground="royalblue4")
         s.map('Blue.TButton', background=[('active', '!disabled', 'cyan'), ('pressed', "white")],
               foreground=[('pressed', "royalblue4"), ('active', "royalblue4")])
@@ -26,7 +26,7 @@ class MagicLessonList(Toplevel):
         self.choice_label = ttk.Label(self, text="Select the Lesson to Learn",
                                       font=("helvetica", 14, 'bold'), background="steelblue4", foreground="white")
         self.scroll_frame = ttk.Frame(self)
-        self.choice_list = tk.Listbox(self.scroll_frame, selectmode=tk.MULTIPLE, background="white",font=("helvetica",12,"bold"),
+        self.choice_list = tk.Listbox(self.scroll_frame, selectmode=tk.MULTIPLE, background="white",font=("helvetica",10,"bold"),
                                       selectbackground='royalblue4', selectforeground='white',foreground="royalblue4", width=40,height=25, bd=0)
         self.lesson_button = ttk.Button(self, text="Select Lesson",
                                         style='Blue.TButton',command=lambda:self.select_lesson(parent))

@@ -19,30 +19,29 @@ class MagicFlashApplication(tk.Toplevel):
         s.theme_use('clam')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
-        s.configure('Red.TLabelframe', background='steelblue4',bordercolor="royalblue4")
+        s.configure('Red.TLabelframe', background='deepskyblue4',bordercolor="royalblue4")
         s.configure('Red.TLabelframe.Label', font=('helvetica', 15, 'bold'))
         s.configure('Red.TLabelframe.Label', foreground='white')
-        s.configure('Red.TLabelframe.Label', background='steelblue4')
+        s.configure('Red.TLabelframe.Label', background='deepskyblue4')
         s.configure('Blue.TButton', background='cyan', foreground='royalblue4',font=('helvetica', 12, 'bold'),bordercolor="royalblue4")
         s.map('Blue.TButton', background=[('active', '!disabled', 'cyan'), ('pressed', 'white')],
                    foreground=[('pressed', 'royalblue4'), ('active', 'royalblue4')])
-        s.configure('TScrollbar', background='royalblue4', foreground='steelblue4')
-        s.map('TScrollbar', background=[('active', '!disabled', 'steelblue4'), ('pressed', 'snow')],
+        s.configure('TScrollbar', background='royalblue4', foreground='deepskyblue4')
+        s.map('TScrollbar', background=[('active', '!disabled', 'deepskyblue4'), ('pressed', 'white')],
               foreground=[('pressed', 'royalblue4'), ('active', 'royalblue4')])
 
         self.title("Lesson Flashcards")
-        self.configure(background='steelblue4')
+        self.configure(background='deepskyblue4')
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
         self.bind("<Configure>",self.resize_c)
 
-        self.controlframe = tk.Frame(self,background='steelblue4')
-        self.show_leaderboard = ttk.Button(self.controlframe, text="Show Leaderboard", command=self.show_board,
-                                        style='Blue.TButton')
+
+
 
         self.lesson_list = []
         app = LessonListFlash.MagicLessonList(parent=self)
-        app.geometry("400x600+50+50")
+        app.geometry("350x600+50+50")
         self.wait_window(app)
         self.start_flashcards()
 
@@ -63,7 +62,7 @@ class MagicFlashApplication(tk.Toplevel):
         self.labelframetwo = ttk.Labelframe(self,
                                             text="Flash Cards", borderwidth=2,relief=tk.RIDGE,style="Red.TLabelframe")
 
-        self.twocontrolframe = tk.Frame(self.labelframetwo, background="steelblue4")
+        self.twocontrolframe = tk.Frame(self.labelframetwo, background="deepskyblue4")
 
         self.next_button = ttk.Button(self.twocontrolframe, text="Next Card",
                                       command=lambda: self.next_flashcard(self.text_index),
@@ -73,14 +72,16 @@ class MagicFlashApplication(tk.Toplevel):
         self.reveal_button.configure(state="disabled")
         self.image_button = ttk.Button(self.twocontrolframe, text="Image Clue", command=self.image_flashcard,
                                         style='Blue.TButton')
+        self.show_leaderboard = ttk.Button(self.twocontrolframe, text="Show Leaderboard", command=self.show_board,
+                                           style='Blue.TButton')
         self.buttonimage = tk.PhotoImage(file="../images/speaker.png")
 
 
 
 
 
-        self.controlframe.grid(row=0,column=0,sticky=tk.W,pady=5)
-        self.show_leaderboard.grid(row=0, column=0,padx=10)
+
+
 
 
 
@@ -99,6 +100,7 @@ class MagicFlashApplication(tk.Toplevel):
 
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
         self.image_button.grid(row=0, column=3, sticky=tk.W, padx=5)
+        self.show_leaderboard.grid(row=0, column=1, padx=10)
 
         self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
                                  wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="royalblue4", background='white',
@@ -162,7 +164,7 @@ class MagicFlashApplication(tk.Toplevel):
             win = tk.Toplevel()
             win.wm_title("Image Clue")
             win.wm_geometry('360x400+500+300')
-            win.configure(background='steelblue4')
+            win.configure(background='deepskyblue4')
 
             self.image_clue = ImageTk.PhotoImage(Image.open(data_capture_flashcard.file_root+os.path.sep+"Lessons"+
                                                             os.path.sep+"Lesson"+str(self.all_images[self.text_index-1][0])+os.path.sep+
@@ -177,7 +179,7 @@ class MagicFlashApplication(tk.Toplevel):
         win = tk.Toplevel()
         win.wm_title("Leaderboard")
         win.wm_geometry('315x600+100+100')
-        win.configure(background='steelblue4')
+        win.configure(background='deepskyblue4')
         win.attributes("-topmost",True)
         self.leaderboard = FlashLeaderBoard.MagicLeaderBoard(win)
         self.leaderboard.grid(row=0, column =0)
