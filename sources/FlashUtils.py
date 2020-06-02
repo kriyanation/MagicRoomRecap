@@ -2,6 +2,8 @@ import subprocess
 import pyttsx3, sys
 
 _isLinux = sys.platform.startswith('linux')
+if not _isLinux:
+    import pythoncom
 def expandList(twodlist):
     onedlist = []
     i=0
@@ -24,6 +26,7 @@ def playtextsound(text,V='m',L='en'):
     if _isLinux:
         engine = pyttsx3.init(driverName='espeak')
     else:
+        pythoncom.CoInitialize()
         engine = pyttsx3.init()
     engine.setProperty('voice', 'en+f2')
     engine.setProperty('rate', 130)
