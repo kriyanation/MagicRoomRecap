@@ -43,6 +43,8 @@ class MagicFlashApplication(tk.Toplevel):
         app = LessonListFlash.MagicLessonList(parent=self)
         app.geometry("350x600+50+50")
         self.wait_window(app)
+        if len(self.lesson_list) == 0:
+            self.destroy()
         self.start_flashcards()
 
 
