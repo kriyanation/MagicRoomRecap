@@ -50,7 +50,7 @@ class MagicFlashApplication(tk.Toplevel):
 
     def resize_c(self,event):
         if hasattr(self,"term_text"):
-            self.term_text.configure( width=int(self.winfo_width()/60), height=int(self.winfo_height()/70))
+            self.term_text.configure( width=int(self.winfo_width()/60), height=int(self.winfo_height()/500))
         if hasattr(self, "answer_text"):
             self.answer_text.configure(width=int(self.winfo_width() / 60), height=int(self.winfo_height() / 70))
 
@@ -72,21 +72,10 @@ class MagicFlashApplication(tk.Toplevel):
         self.reveal_button = ttk.Button(self.twocontrolframe, text="Reveal Card", command=self.answer_flashcard,
                                           style='Blue.TButton')
         self.reveal_button.configure(state="disabled")
-        self.image_button = ttk.Button(self.twocontrolframe, text="Image Clue", command=self.image_flashcard,
-                                        style='Blue.TButton')
+
         self.show_leaderboard = ttk.Button(self.twocontrolframe, text="Show Leaderboard", command=self.show_board,
                                            style='Blue.TButton')
         self.buttonimage = tk.PhotoImage(file="../images/speaker.png")
-
-
-
-
-
-
-
-
-
-
 
         term_text_list = data_capture_flashcard.get_Fact_Terms(self.lesson_list)
         description_text_list = data_capture_flashcard.get_Fact_Descriptions(self.lesson_list)
@@ -101,12 +90,13 @@ class MagicFlashApplication(tk.Toplevel):
         self.next_button.grid(row=0,column=4, sticky=tk.W,padx=5)
 
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
-        self.image_button.grid(row=0, column=3, sticky=tk.W, padx=5)
+
         self.show_leaderboard.grid(row=0, column=1, padx=10)
 
         self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
-                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="royalblue4", background='white',
+                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/500), font=("comic sans", 25), foreground="royalblue4", background='white',
                                 )
+
         self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
                                    wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="royalblue4", background='white',
                                   )
@@ -130,6 +120,7 @@ class MagicFlashApplication(tk.Toplevel):
                                                   style='Blue.TButton')
         self.flash_audio_button_term.grid(row=1,column=1,padx=15)
         self.animate_flashcard(self.term_text,0)
+        self.image_flashcard()
 
     def animate_flashcard(self,text,index):
         if text.cget('background')=="white":
@@ -150,7 +141,7 @@ class MagicFlashApplication(tk.Toplevel):
                                                   command=lambda: self.play_term_audio(self.all_descriptions[self.reveal_index]),
                                                   style='Blue.TButton')
 
-        self.answer_text.grid(row=1,column=3,padx=15)
+        self.answer_text.grid(row=1,rowspan=2,column=3,padx=15)
         self.flash_audio_button_description.grid(row=1, column=4)
 
 
@@ -163,19 +154,13 @@ class MagicFlashApplication(tk.Toplevel):
 
 
     def  image_flashcard(self):
-            win = tk.Toplevel()
-            win.wm_title("Image Clue")
-            win.wm_geometry('360x400+500+300')
-            win.configure(background='deepskyblue4')
 
             self.image_clue = ImageTk.PhotoImage(Image.open(data_capture_flashcard.file_root+os.path.sep+"Lessons"+
                                                             os.path.sep+"Lesson"+str(self.all_images[self.text_index-1][0])+os.path.sep+
-                                                            "images"+os.path.sep+self.all_images[self.text_index-1][1]).resize((350,350)))
-            self.image_label = ttk.Label(win,image=self.image_clue)
-            self.image_label.grid(row=0, column=0)
-            win.attributes("-topmost", True)
-            b = ttk.Button(win, text="Close",style='Blue.TButton', command=win.destroy)
-            b.grid(row=1, column=0,pady=5)
+                                                            "images"+os.path.sep+self.all_images[self.text_index-1][1]).resize((500,400)))
+            self.image_label = ttk.Label(self.labelframetwo,image=self.image_clue)
+            self.image_label.grid(row=2, column=0)
+
 
     def show_board(self):
         win = tk.Toplevel()
@@ -197,8 +182,8 @@ if __name__ == "__main__":
     screen_width = app.winfo_screenwidth()
     screen_height = app.winfo_screenheight()
     app.geometry(str(screen_width)+'x'+str(screen_height)+'+5+5')
-    a = threading.Thread(target=app.process_joystick,name="gamepad",daemon=True)
-    print(a)
-    a.start()
+    #a = threading.Thread(target=app.process_joystick,name="gamepad",daemon=True)
+    #print(a)
+    #a.start()
     app.mainloop()
 
