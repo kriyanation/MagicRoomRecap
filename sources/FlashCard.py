@@ -85,10 +85,10 @@ class MagicFlashApplication(tk.Toplevel):
         self.all_descriptions = FlashUtils.expandList(description_text_list)
         self.all_images = FlashUtils.expandImageList(image_list)
 
-
+        self.bind('n',lambda event, a=self.text_index:self.next_flashcard(a,event))
+        self.bind('r', self.answer_flashcard)
         self.twocontrolframe.grid(row=0, column=0, sticky=tk.W,pady=5)
         self.next_button.grid(row=0,column=4, sticky=tk.W,padx=5)
-
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
 
         self.show_leaderboard.grid(row=0, column=1, padx=10)
@@ -104,7 +104,7 @@ class MagicFlashApplication(tk.Toplevel):
         self.next_flashcard(self.text_index)
         #self.leaderboard.grid(row=1, column=1)
 
-    def next_flashcard(self,indexa):
+    def next_flashcard(self,indexa,event=None):
 
         self.reveal_button.configure(state="enabled")
         self.term_text.delete(1.0, tk.END)
@@ -113,8 +113,10 @@ class MagicFlashApplication(tk.Toplevel):
         self.term_text.insert(1.0, self.all_terms[indexa])
         self.term_text.grid(row=1,column=0,padx=25,pady=10)
         self.text_index += 1
+
         if self.text_index == len(self.all_terms) :
             self.text_index = 0
+        self.bind('n', lambda event, a=self.text_index: self.next_flashcard(a, event))
         self.flash_audio_button_term = ttk.Button(self.labelframetwo, text="hello", image=self.buttonimage,
                                                   command=lambda: self.play_term_audio( self.all_terms[indexa]),
                                                   style='Blue.TButton')
@@ -132,7 +134,7 @@ class MagicFlashApplication(tk.Toplevel):
         index += 1
         self.after(1000,self.animate_flashcard,text,index)
 
-    def answer_flashcard(self):
+    def answer_flashcard(self,event=None):
         self.answer_text.delete(1.0, tk.END)
         self.reveal_index = self.text_index - 1
 
