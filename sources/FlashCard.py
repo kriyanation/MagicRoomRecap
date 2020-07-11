@@ -36,9 +36,6 @@ class MagicFlashApplication(tk.Toplevel):
         self.screen_height = self.winfo_screenheight()
         self.bind("<Configure>",self.resize_c)
 
-
-
-
         self.lesson_list = []
         app = LessonListFlash.MagicLessonList(parent=self)
         app.geometry("350x600+50+50")
@@ -85,8 +82,8 @@ class MagicFlashApplication(tk.Toplevel):
         self.all_descriptions = FlashUtils.expandList(description_text_list)
         self.all_images = FlashUtils.expandImageList(image_list)
 
-        self.bind('n',lambda event, a=self.text_index:self.next_flashcard(a,event))
-        self.bind('r', self.answer_flashcard)
+        self.bind('<Control-Key-n>',lambda event, a=self.text_index:self.next_flashcard(a,event))
+        self.bind('<Control-Key-r>', self.answer_flashcard)
         self.twocontrolframe.grid(row=0, column=0, sticky=tk.W,pady=5)
         self.next_button.grid(row=0,column=4, sticky=tk.W,padx=5)
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
@@ -116,7 +113,7 @@ class MagicFlashApplication(tk.Toplevel):
 
         if self.text_index == len(self.all_terms) :
             self.text_index = 0
-        self.bind('n', lambda event, a=self.text_index: self.next_flashcard(a, event))
+        self.bind('<Control-Key-n>', lambda event, a=self.text_index: self.next_flashcard(a, event))
         self.flash_audio_button_term = ttk.Button(self.labelframetwo, text="hello", image=self.buttonimage,
                                                   command=lambda: self.play_term_audio( self.all_terms[indexa]),
                                                   style='Blue.TButton')
