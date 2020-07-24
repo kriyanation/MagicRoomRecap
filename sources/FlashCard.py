@@ -6,6 +6,7 @@ import threading,configparser
 import LessonListFlash
 import data_capture_flashcard, FlashUtils, FlashLeaderBoard
 from pathlib import Path
+import tooltip
 from PIL import ImageTk, Image
 
 
@@ -38,7 +39,7 @@ class MagicFlashApplication(tk.Toplevel):
 
         self.lesson_list = []
         app = LessonListFlash.MagicLessonList(parent=self)
-        app.geometry("350x600+50+50")
+        app.geometry("350x800+50+50")
         self.wait_window(app)
         if len(self.lesson_list) == 0:
             self.destroy()
@@ -66,12 +67,15 @@ class MagicFlashApplication(tk.Toplevel):
         self.next_button = ttk.Button(self.twocontrolframe, text="Next Card",
                                       command=lambda: self.next_flashcard(self.text_index),
                                       style='Blue.TButton')
+        self.next_button.tooltip = tooltip.ToolTip(self.next_button, "Next Card\nctrl-n")
         self.reveal_button = ttk.Button(self.twocontrolframe, text="Reveal Card", command=self.answer_flashcard,
                                           style='Blue.TButton')
+        self.reveal_button.tooltip = tooltip.ToolTip(self.reveal_button, "Reveal Answer\nctrl-r")
         self.reveal_button.configure(state="disabled")
 
         self.show_leaderboard = ttk.Button(self.twocontrolframe, text="Show Leaderboard", command=self.show_board,
                                            style='Blue.TButton')
+        self.show_leaderboard.tooltip = tooltip.ToolTip(self.show_leaderboard, "Show Leaderboard\nctrl-l")
         self.buttonimage = tk.PhotoImage(file="../images/speaker.png")
 
         term_text_list = data_capture_flashcard.get_Fact_Terms(self.lesson_list)
@@ -84,6 +88,7 @@ class MagicFlashApplication(tk.Toplevel):
 
         self.bind('<Control-Key-n>',lambda event, a=self.text_index:self.next_flashcard(a,event))
         self.bind('<Control-Key-r>', self.answer_flashcard)
+        self.bind('<Control-Key-l>', self.show_board)
         self.twocontrolframe.grid(row=0, column=0, sticky=tk.W,pady=5)
         self.next_button.grid(row=0,column=4, sticky=tk.W,padx=5)
         self.reveal_button.grid(row=0, column=2, sticky=tk.W,padx=5)
@@ -91,14 +96,17 @@ class MagicFlashApplication(tk.Toplevel):
         self.show_leaderboard.grid(row=0, column=1, padx=10)
 
         self.term_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
-                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/500), font=("comic sans", 25), foreground="royalblue4", background='white',
+                                 wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/500), font=("helvetica", 18), foreground="royalblue4", background='white',
                                 )
 
         self.answer_text = tk.Text(self.labelframetwo, borderwidth=2, highlightthickness=0, relief=tk.RAISED,highlightcolor="royalblue4",
-                                   wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("comic sans", 25), foreground="royalblue4", background='white',
+                                   wrap=tk.WORD,width=int(self.winfo_width()/60), height=int(self.winfo_height()/70), font=("helvetica", 18), foreground="royalblue4", background='white',
                                   )
         self.labelframetwo.grid(row=1, column=0, padx=200,pady=100,sticky=tk.NSEW)
         self.next_flashcard(self.text_index)
+
+        self.answer_flashcard()
+        self.answer_text.delete(1.0, tk.END)
         #self.leaderboard.grid(row=1, column=1)
 
     def next_flashcard(self,indexa,event=None):
@@ -120,6 +128,7 @@ class MagicFlashApplication(tk.Toplevel):
         self.flash_audio_button_term.grid(row=1,column=1,padx=15)
         self.animate_flashcard(self.term_text,0)
         self.image_flashcard()
+
 
     def animate_flashcard(self,text,index):
         if text.cget('background')=="white":
@@ -156,12 +165,12 @@ class MagicFlashApplication(tk.Toplevel):
 
             self.image_clue = ImageTk.PhotoImage(Image.open(data_capture_flashcard.file_root+os.path.sep+"Lessons"+
                                                             os.path.sep+"Lesson"+str(self.all_images[self.text_index-1][0])+os.path.sep+
-                                                            "images"+os.path.sep+self.all_images[self.text_index-1][1]).resize((500,400)))
+                                                            "images"+os.path.sep+self.all_images[self.text_index-1][1]).resize((300,300)))
             self.image_label = ttk.Label(self.labelframetwo,image=self.image_clue)
             self.image_label.grid(row=2, column=0)
 
 
-    def show_board(self):
+    def show_board(self,event=None):
         win = tk.Toplevel()
         win.wm_title("Leaderboard")
         win.wm_geometry('315x600+100+100')
