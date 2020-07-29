@@ -39,7 +39,7 @@ class MagicFlashApplication(tk.Toplevel):
 
         self.lesson_list = []
         app = LessonListFlash.MagicLessonList(parent=self)
-        app.geometry("350x800+50+50")
+        app.geometry("350x700+50+50")
         self.wait_window(app)
         if len(self.lesson_list) == 0:
             self.destroy()
