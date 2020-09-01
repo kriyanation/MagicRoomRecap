@@ -1,11 +1,13 @@
 import sqlite3
 from pathlib import Path
 import configparser, os
-from tkinter import StringVar
+from tkinter import StringVar, messagebox
+
 TEST_ROW = 16
 
 file_root = os.path.abspath(os.path.join(os.getcwd(), ".."))
 db = file_root + os.path.sep + "MagicRoom.db"
+
 
 def get_Images(lesson_id_list):
 
@@ -111,3 +113,30 @@ def save_leader_board_data(list_points):
 
     connection.commit()
     connection.close()
+
+def get_experiment_content(lesson_id):
+    imageroot = file_root + os.path.sep + "Lessons"+os.path.sep+"Lesson"+str(lesson_id)+os.path.sep+"images"+os.path.sep
+    try:
+        connection = sqlite3.connect(db)
+        cur = connection.cursor()
+
+        sql = (
+            'select Application_Steps_Number, Application_Step_Description_1, Application_Step_Description_2, Application_Step_Description_3,'
+            'Application_Step_Description_4,Application_Step_Description_5,Application_Step_Description_6,Application_Step_Description_7'
+            ',Application_Step_Description_8,Application_Steps_Widget_1,Application_Steps_Widget_2,Application_Steps_Widget_3,Application_Steps_Widget_4'
+            ',Application_Steps_Widget_5,Application_Steps_Widget_6,Application_Steps_Widget_7,Application_Steps_Widget_8 from Magic_Science_Lessons '
+            'where Lesson_ID = ?')
+        experiment_info_c = cur.execute(sql, (lesson_id,))
+        experiment_info = experiment_info_c.fetchone()
+        # print(experiment_info)
+        experiment_steps = [experiment_info[1], experiment_info[2], experiment_info[3], experiment_info[4],
+                            experiment_info[5], experiment_info[6], experiment_info[7], experiment_info[8]]
+        experiment_images = [imageroot + experiment_info[9], imageroot + experiment_info[10],
+                             imageroot + experiment_info[11], imageroot + experiment_info[12],
+                             imageroot + experiment_info[13], imageroot + experiment_info[14],
+                             imageroot + experiment_info[15], imageroot + experiment_info[16]]
+        experiment_steps_total = experiment_info[0]
+        connection.close()
+        return experiment_steps, experiment_images, experiment_steps_total
+    except sqlite3.OperationalError:
+        messagebox.showerror("DB Error", "Cannot Connect to Database")

@@ -1,11 +1,10 @@
 import os
 import tkinter as tk
 from tkinter import ttk
-import threading,configparser
 
 import LessonListFlash
 import data_capture_flashcard, FlashUtils, FlashLeaderBoard
-from pathlib import Path
+
 import tooltip
 from PIL import ImageTk, Image
 
@@ -24,7 +23,7 @@ class MagicFlashApplication(tk.Toplevel):
         s.configure('Red.TLabelframe.Label', font=('helvetica', 15, 'bold'))
         s.configure('Red.TLabelframe.Label', foreground='white')
         s.configure('Red.TLabelframe.Label', background='deepskyblue4')
-        s.configure('Blue.TButton', background='cyan', foreground='royalblue4',font=('helvetica', 12, 'bold'),bordercolor="royalblue4")
+        s.configure('Blue.TButton', background='deepskyblue4', foreground='snow',font=('helvetica', 12, 'bold'),bordercolor="royalblue4")
         s.map('Blue.TButton', background=[('active', '!disabled', 'cyan'), ('pressed', 'white')],
                    foreground=[('pressed', 'royalblue4'), ('active', 'royalblue4')])
         s.configure('TScrollbar', background='royalblue4', foreground='deepskyblue4')
